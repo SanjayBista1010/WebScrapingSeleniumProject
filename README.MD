@@ -1,4 +1,5 @@
 # 📰 OnlineKhabar Headline Scraper
+[![Scraper Workflow](https://github.com/SanjayBista1010/WebScrapingSeleniumProject/actions/workflows/scraper.yml/badge.svg)](https://github.com/SanjayBista1010/WebScrapingSeleniumProject/actions)
 
 This project scrapes the latest news headline from [OnlineKhabar English](https://english.onlinekhabar.com/) and saves it into a CSV file (`data/headlines.csv`).  
 It also runs automatically every hour using **GitHub Actions** and commits new headlines to this repository.
@@ -80,5 +81,6 @@ Fetched At,Headline,Author,Link
 
 ## 👨‍💻 Author
 **Sanjay Bista**  
+
 
 
