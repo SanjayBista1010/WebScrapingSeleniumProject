@@ -1,6 +1,5 @@
 import os
 import sys
-import csv
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
@@ -31,17 +30,22 @@ def fetch_and_save_headline():
         link = headline_tag["href"]
         author = author_tag.text.strip() if author_tag else "Unknown"
 
-        # Skip duplicate
-        if is_duplicate(DATA_PATH, headline, column_index=1):
-            logger.info("No new headline. Skipping: %s", headline)
-            return
+        # Skip duplicate headline
+        if os.path.isfile(DATA_PATH):
+            with open(DATA_PATH, "r", encoding="utf-8") as f:
+                exists = any(row[1] == headline for row in csv.reader(f))
+            if exists:
+                logger.info("No new headline. Skipping: %s", headline)
+                return
 
-        # Save headline
-        save_to_csv(
-            DATA_PATH,
-            [datetime.now(), headline, author, link],
-            headers=["Fetched At", "Headline", "Author", "Link"]
-        )
+        # Save new headline
+        file_exists = os.path.isfile(DATA_PATH)
+        with open(DATA_PATH, "a", encoding="utf-8", newline="") as f:
+            writer = csv.writer(f)
+            if not file_exists:
+                writer.writerow(["Fetched At", "Headline", "Author", "Link"])
+            writer.writerow([datetime.now(), headline, author, link])
+
         logger.info("Saved headline: %s", headline)
 
     except Exception as e:
