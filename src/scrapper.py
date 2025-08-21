@@ -4,8 +4,8 @@ from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 
 from src.logger import logger
 from src.exception import CustomException
@@ -23,7 +23,6 @@ def fetch_and_save_headline():
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
         options.add_argument("--window-size=1920,1080")
-        options.add_argument("--remote-debugging-port=9222")
         options.add_argument(f"--user-data-dir=/tmp/chrome_user_data_{datetime.now().timestamp()}")
 
         driver = webdriver.Chrome(
@@ -34,29 +33,40 @@ def fetch_and_save_headline():
         url = "https://english.onlinekhabar.com/"
         driver.get(url)
 
-        # Get first headline
-        article = driver.find_element(By.CSS_SELECTOR, "div.ok-post-contents")
-        headline_tag = article.find_element(By.TAG_NAME, "h2").find_element(By.TAG_NAME, "a")
-        author_tag = article.find_element(By.CSS_SELECTOR, "span.ok-post-hours")
+        # Get all headlines
+        articles = driver.find_elements(By.CSS_SELECTOR, "div.ok-post-contents")
 
-        headline = headline_tag.text.strip()
-        link = headline_tag.get_attribute("href")
-        author = author_tag.text.strip() if author_tag else "Unknown"
-
-        driver.quit()
-
-        # Prevent duplicate headline
-        if is_duplicate(DATA_PATH, headline, column_index=1):
-            logger.info("No new headline. Skipping: %s", headline)
+        if not articles:
+            logger.warning("No headlines found on the page.")
+            driver.quit()
             return
 
-        # Save new headline
-        save_to_csv(
-            DATA_PATH,
-            [datetime.now(), headline, author, link],
-            headers=["Fetched At", "Headline", "Author", "Link"]
-        )
-        logger.info("Saved headline: %s", headline)
+        for article in articles:
+            try:
+                headline_tag = article.find_element(By.TAG_NAME, "h2").find_element(By.TAG_NAME, "a")
+                author_tag = article.find_element(By.CSS_SELECTOR, "span.ok-post-hours")
+
+                headline = headline_tag.text.strip()
+                link = headline_tag.get_attribute("href")
+                author = author_tag.text.strip() if author_tag else "Unknown"
+
+                # Skip duplicates
+                if is_duplicate(DATA_PATH, headline, column_index=1):
+                    logger.info("No new headline. Skipping: %s", headline)
+                    continue
+
+                # Save new headline
+                save_to_csv(
+                    DATA_PATH,
+                    [datetime.now(), headline, author, link],
+                    headers=["Fetched At", "Headline", "Author", "Link"]
+                )
+                logger.info("Saved headline: %s", headline)
+
+            except Exception as inner_e:
+                logger.error("Failed to process one article: %s", inner_e)
+
+        driver.quit()
 
     except Exception as e:
         logger.error("Exception occurred in scraper")
