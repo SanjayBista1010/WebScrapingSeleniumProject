@@ -1,49 +1,88 @@
-# Web Scraping Selenium Project
+# 📰 OnlineKhabar Headline Scraper
 
-This project scrapes the latest news headlines from [OnlineKhabar English](https://english.onlinekhabar.com/) and stores them in a CSV file.
+[![Scraper Workflow](https://github.com/SanjayBista1010/WebScrapingSeleniumProject/actions/workflows/scraper.yml/badge.svg)](https://github.com/SanjayBista1010/WebScrapingSeleniumProject/actions)
 
-## Features
-- Scrapes the **first headline** from OnlineKhabar English.
-- Prevents duplicate entries.
-- Saves data in `data/headlines.csv`.
-- Runs automatically using **GitHub Actions**.
-- Commits and pushes updates directly to the repository.
+This project scrapes the latest news headline from [OnlineKhabar English](https://english.onlinekhabar.com/) and saves it into a CSV file (`data/headlines.csv`).  
+It also runs automatically every hour using **GitHub Actions** and commits new headlines to this repository.
 
-## File Structure
+---
+
+## 📂 Project Structure
+
 ```
-.
 ├── data/
-│   └── headlines.csv       # Stored headlines
+│   └── headlines.csv      # Collected headlines
 ├── src/
-│   ├── logger.py           # Logging utility
-│   ├── exception.py        # Custom exception handler
-│   ├── utils.py            # Helper functions (CSV, duplicate check)
-│   └── scraper.py          # Main scraper logic
-├── main.py                 # Entry point
-├── .github/
-│   └── workflows/
-│       └── scraper.yml     # GitHub Actions workflow
-└── README.md               # Project documentation
+│   ├── scrapper.py        # Scraper logic
+│   ├── utils.py           # Helper functions (CSV save, duplicate check)
+│   ├── logger.py          # Logging setup
+│   └── exception.py       # Custom exception handler
+├── main.py                # Entry point to run scraper
+├── requirements.txt       # Dependencies
+└── .github/workflows/
+    └── scraper.yml        # GitHub Actions workflow
 ```
 
-## How to Run Locally
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/SanjayBista1010/WebScrapingSeleniumProject.git
-   cd WebScrapingSeleniumProject
-   ```
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Run the scraper:
-   ```bash
-   python main.py
-   ```
+---
 
-## GitHub Actions
-- The scraper runs on a schedule (every 2 hours).
-- If a new headline is found, it is committed and pushed automatically.
+## ⚙️ Installation & Usage
 
-## Author
+### 1. Clone the repository
+```bash
+git clone https://github.com/SanjayBista1010/WebScrapingSeleniumProject.git
+cd WebScrapingSeleniumProject
+```
+
+### 2. Create a virtual environment (optional but recommended)
+```bash
+python -m venv venv
+source venv/bin/activate   # Linux/Mac
+venv\Scripts\activate      # Windows
+```
+
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run the scraper manually
+```bash
+python main.py
+```
+
+This will:
+- Fetch the latest headline
+- Append it to `data/headlines.csv` (if not already present)
+- Log the result in console and log files
+
+---
+
+## 🤖 Automation with GitHub Actions
+
+The scraper runs **every hour** on GitHub Actions and commits new headlines back to this repo.
+
+- Workflow file: `.github/workflows/scraper.yml`
+- Commit format:  
+  ```
+  Update headlines [skip ci]
+  ```
+
+You can also run it manually from the **Actions** tab.
+
+---
+
+## 📝 Example CSV Output
+
+```csv
+Fetched At,Headline,Author,Link
+2025-08-21 12:00:00,Example Headline,2 hours ago,https://english.onlinekhabar.com/example-news
+```
+
+---
+
+## 👨‍💻 Author
 **Sanjay Bista**  
+📧 sanjaybista1010@gmail.com  
+🔗 [GitHub: SanjayBista1010](https://github.com/SanjayBista1010)
+
+---
