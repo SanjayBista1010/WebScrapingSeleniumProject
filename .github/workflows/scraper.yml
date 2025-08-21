@@ -27,3 +27,10 @@ jobs:
 
       - name: Run scraper
         run: python main.py
+            - name: Commit and Push changes
+        run: |
+          git config --global user.name "SanjayBista1010"
+          git config --global user.email "sanjaybista1010@gmail.com"
+          git add data/headlines.csv
+          git commit -m "Update headlines [skip ci]" || echo "No changes to commit"
+          git push
