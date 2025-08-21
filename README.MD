@@ -82,7 +82,3 @@ Fetched At,Headline,Author,Link
 
 ## 👨‍💻 Author
 **Sanjay Bista**  
-📧 sanjaybista1010@gmail.com  
-🔗 [GitHub: SanjayBista1010](https://github.com/SanjayBista1010)
-
----
