@@ -27,11 +27,6 @@ jobs:
       - name: Run scraper
         run: python main.py
 
-      - name: Upload logs
-        uses: actions/upload-artifact@v4
-        with:
-          name: scraper-logs
-          path: logs/
 
       - name: Upload headlines
         uses: actions/upload-artifact@v4
