@@ -1,30 +1,53 @@
 name: Run Scraper
 
-# Run every 10 to 15 minutes
+# Trigger every 10 minutes and allow manual runs
 on:
   schedule:
-    - cron: '*/10 * * * *'   # every 10 minutes
-    - cron: '*/15 * * * *'   # every 15 minutes
-  workflow_dispatch:           # allows manual trigger
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
 
 jobs:
   scraper-job:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install selenium webdriver-manager
 
+      # 4️⃣ Show repo structure (debugging)
+      - name: List files
+        run: |
+          pwd
+          ls -R
+
+      # 5️⃣ Run scraper with random delay (0–5 min) for 10–15 min interval
       - name: Run scraper
         run: |
-          python src/main.py
+          python - <<EOF
+import random
+import time
+time.sleep(random.randint(0, 300))  # Random 0–5 min delay
+import src.main
+EOF
+
+
+      # 6️⃣ Upload headlines CSV
+      - name: Upload headlines
+        uses: actions/upload-artifact@v3
+        with:
+          name: headlines
+          path: data/headlines.csv
