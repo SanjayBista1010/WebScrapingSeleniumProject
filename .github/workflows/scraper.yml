@@ -1,9 +1,10 @@
 name: Run Scraper
 
+# Run every 10 to 15 minutes
 on:
   schedule:
-    - cron: '*/10 * * * *'
-  workflow_dispatch:
+    - cron: '*/15 * * * *'   # every 15 minutes
+  workflow_dispatch:           # allows manual trigger
 
 jobs:
   scraper-job:
@@ -22,14 +23,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install selenium webdriver-manager beautifulsoup4 lxml requests
+          # Install Chrome for headless scraping
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser chromium-chromedriver
 
       - name: Run scraper
-        run: python main.py
-
-
-      - name: Upload headlines
-        uses: actions/upload-artifact@v4
-        with:
-          name: headlines
-          path: data/headlines.csv
+        env:
+          DISPLAY: :99
+        run: |
+          python src/main.py

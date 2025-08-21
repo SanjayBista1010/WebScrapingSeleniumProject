@@ -3,10 +3,10 @@ import sys
 from datetime import datetime
 
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 
 from src.logger import logger
 from src.exception import CustomException
@@ -17,14 +17,16 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "headlines.csv
 
 def fetch_and_save_headline():
     try:
-        # Setup headless Firefox for GitHub Actions
+        # Setup headless Chrome
         options = Options()
         options.headless = True
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--window-size=1920,1080")
 
-        driver = webdriver.Firefox(
-            service=FirefoxService(GeckoDriverManager().install()),
+        driver = webdriver.Chrome(
+            service=ChromeService(ChromeDriverManager().install()),
             options=options
         )
 
