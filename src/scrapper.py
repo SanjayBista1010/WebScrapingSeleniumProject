@@ -17,11 +17,16 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "headlines.csv
 
 def fetch_and_save_headline():
     try:
-        # Setup headless Firefox
+        # Setup headless Firefox for GitHub Actions
         options = Options()
         options.headless = True
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
 
-        driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()), options=options)
+        driver = webdriver.Firefox(
+            service=FirefoxService(GeckoDriverManager().install()),
+            options=options
+        )
 
         url = "https://english.onlinekhabar.com/"
         driver.get(url)
