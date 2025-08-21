@@ -8,11 +8,6 @@ from src.exception import CustomException
 
 def main():
     try:
-        # Random delay between 0 and 5 minutes (0–300 seconds)
-        sleep_time = random.randint(0, 300)
-        logger.info(f"⏱ Sleeping for {sleep_time} seconds before running scraper")
-        time.sleep(sleep_time)
-
         logger.info("🚀 Scraper started")
         fetch_and_save_headline()
         logger.info("✅ Scraper finished successfully")
