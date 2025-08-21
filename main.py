@@ -1,14 +1,19 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
+import sys
+from src.scrapper import fetch_and_save_headline
+from src.logger import logger
+from src.exception import CustomException
 
 
-driver = webdriver.Firefox()
-driver.get("http://www.python.org")
-assert "Python" in driver.title
-elem = driver.find_element(By.NAME, "q")
-elem.clear()
-elem.send_keys("pycon")
-elem.send_keys(Keys.RETURN)
-assert "No results found." not in driver.page_source
-driver.close()
+def main():
+    try:
+        logger.info("🚀 Scraper started")
+        fetch_and_save_headline()
+        logger.info("✅ Scraper finished successfully")
+
+    except Exception as e:
+        logger.error("❌ An error occurred while running the scraper")
+        raise CustomException(e, sys)
+
+
+if __name__ == "__main__":
+    main()

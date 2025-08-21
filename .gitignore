@@ -35,6 +35,8 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+logs/
+data/
 
 # Unit test / coverage reports
 htmlcov/
@@ -138,6 +140,7 @@ celerybeat.pid
 .env
 .envrc
 .venv
+seleniumvenv/
 env/
 venv/
 ENV/
