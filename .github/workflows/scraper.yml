@@ -2,7 +2,7 @@ name: Run Scraper
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # every 10 minutes
+    - cron: '*/10 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -25,16 +25,16 @@ jobs:
           pip install selenium webdriver-manager beautifulsoup4 lxml requests
 
       - name: Run scraper
-        run: python main.py  # main.py is now in root
+        run: python main.py
 
       - name: Upload logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: scraper-logs
           path: logs/
 
       - name: Upload headlines
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: headlines
           path: data/headlines.csv
