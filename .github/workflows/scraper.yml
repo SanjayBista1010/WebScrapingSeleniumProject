@@ -1,10 +1,9 @@
 name: Run Scraper
 
-# Run every 10 to 15 minutes
 on:
   schedule:
-    - cron: '*/15 * * * *'   # every 15 minutes
-  workflow_dispatch:           # allows manual trigger
+    - cron: '*/10 * * * *' # every 10 minutes
+  workflow_dispatch:
 
 jobs:
   scraper-job:
@@ -23,12 +22,8 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          # Install Chrome for headless scraping
           sudo apt-get update
           sudo apt-get install -y chromium-browser chromium-chromedriver
 
       - name: Run scraper
-        env:
-          DISPLAY: :99
-        run: |
-          python main.py
+        run: python main.py

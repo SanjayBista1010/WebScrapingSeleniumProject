@@ -1,12 +1,11 @@
 import os
 import sys
 from datetime import datetime
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
 
 from src.logger import logger
 from src.exception import CustomException
@@ -17,13 +16,15 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "headlines.csv
 
 def fetch_and_save_headline():
     try:
-        # Setup headless Chrome
+        # Chrome headless options for GitHub Actions
         options = Options()
-        options.headless = True
+        options.add_argument("--headless")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
         options.add_argument("--window-size=1920,1080")
+        options.add_argument("--remote-debugging-port=9222")
+        options.add_argument(f"--user-data-dir=/tmp/chrome_user_data_{datetime.now().timestamp()}")
 
         driver = webdriver.Chrome(
             service=ChromeService(ChromeDriverManager().install()),
