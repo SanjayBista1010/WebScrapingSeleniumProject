@@ -31,4 +31,4 @@ jobs:
         env:
           DISPLAY: :99
         run: |
-          python src/main.py
+          python main.py
