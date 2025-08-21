@@ -3,7 +3,10 @@ name: Scrape Headlines
 on:
   schedule:
     - cron: "0 * * * *"   # every hour
-  workflow_dispatch:       # allow manual trigger
+  workflow_dispatch:       # manual trigger
+
+permissions:
+  contents: write   # ✅ required for git push
 
 jobs:
   scrape:
@@ -12,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
