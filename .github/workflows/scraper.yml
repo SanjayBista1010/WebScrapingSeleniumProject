@@ -3,7 +3,7 @@ name: Run Scraper
 # Trigger every 10 minutes and allow manual runs
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '*/10 * * * *'  # every 10 minutes
   workflow_dispatch:
 
 jobs:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repository
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -26,26 +26,26 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install selenium webdriver-manager
+          pip install selenium webdriver-manager beautifulsoup4 lxml requests
 
-      # 4️⃣ Show repo structure (debugging)
+      # 4️⃣ List files (optional, for debugging)
       - name: List files
         run: |
           pwd
           ls -R
 
-      # 5️⃣ Run scraper with random delay (0–5 min) for 10–15 min interval
+      # 5️⃣ Run scraper (main.py already has random delay)
       - name: Run scraper
-        run: |
-          python - <<EOF
-import random
-import time
-time.sleep(random.randint(0, 300))  # Random 0–5 min delay
-import src.main
-EOF
+        run: python src/main.py
 
+      # 6️⃣ Upload logs
+      - name: Upload logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: scraper-logs
+          path: logs/
 
-      # 6️⃣ Upload headlines CSV
+      # 7️⃣ Upload headlines CSV
       - name: Upload headlines
         uses: actions/upload-artifact@v3
         with:
